@@ -1,6 +1,6 @@
 import React from 'react';
-import data from "./data.json"
-
+import data from './data.json'
+import Product from './components/Products'
 class App extends React.Component {
   constructor() {
     super();
@@ -19,7 +19,7 @@ class App extends React.Component {
         <main>
           <div className="content">
             <div className="main">
-              Products
+              <Product products={this.state.products} />
             </div>
             <div className="sidebar">CartItems</div>
           </div>
