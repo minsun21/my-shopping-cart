@@ -9,7 +9,7 @@ class App extends React.Component {
     super();
     this.state = {
       products: data.products,
-      cartItems: [],
+      cartItems: localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : [],
       size: "",
       sort: "",
     };
@@ -19,10 +19,10 @@ class App extends React.Component {
     this.setState({
       cartItems: cartItems.filter(x => x._id !== product._id),
     })
+    localStorage.setItem("cartItems", JSON.stringify(cartItems.filter(x => x._id !== product._id)));
   }
   addToCart = (product) => {
-    debugger;
-    const cartItems = this.state.cartItems.slice();
+    const cartItems = this.state.cartItems;
     let alreadyInCart = false;
     cartItems.forEach(item => {
       if (item._id === product._id) {
@@ -34,6 +34,7 @@ class App extends React.Component {
       cartItems.push({ ...product, count: 1 });
     }
     this.setState({ cartItems });
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }
   filterProducts = (event) => {
     if (event.target.value === "") {
@@ -57,7 +58,10 @@ class App extends React.Component {
             (a._id > b._id) ? 1 : -1
       ))
     });
-    console.log(event.target.value);
+  }
+
+  createOrder = (order) => {
+    alert("Need to save order for " + order.name);
   }
   render() {
     return (
@@ -77,7 +81,7 @@ class App extends React.Component {
               <Product products={this.state.products} addToCart={this.addToCart} />
             </div>
             <div className="sidebar">
-              <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} />
+              <Cart createOrder={this.createOrder} cartItems={this.state.cartItems} removeFromCart={this.removeFromCart} />
             </div>
           </div>
 
